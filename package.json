@@ -1,13 +1,37 @@
 {
   "name": "maxia-miscellaneous",
-  "version": "1.0.0",
+  "version": "1.1.6",
   "description": "Max.ia Helper functions and styles",
   "author": "",
   "license": "ISC",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "scripts": {
-    "sass": "sass -w styles/general.scss:styles/general.css styles/item-design.scss:styles/item-design.css"
+    "build": "tsc --build",
+    "sass": "sass -w styles/general.scss:dist/styles/general.css styles/item-design.scss:dist/styles/item-design.css"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^4.29.7",
+    "axios": "^1.4.0",
+    "lodash": "^4.17.21",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
-    "sass": "^1.63.6"
+    "@bugsnag/js": "^7.20.2",
+    "@tanstack/react-query": "^4.29.7",
+    "@types/lodash": "^4.14.195",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "axios": "^1.4.0",
+    "lodash": "^4.17.21",
+    "react": "^18.2.0",
+    "sass": "^1.63.6",
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
   }
 }
