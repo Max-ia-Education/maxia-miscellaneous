@@ -1,0 +1,13 @@
+{
+  "name": "maxia-miscellaneous",
+  "version": "1.0.0",
+  "description": "Max.ia Helper functions and styles",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "sass": "sass -w styles/general.scss:styles/general.css styles/item-design.scss:styles/item-design.css"
+  },
+  "devDependencies": {
+    "sass": "^1.63.6"
+  }
+}
