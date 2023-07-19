@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 export const useShow: (defaultVisibility?: boolean) => {
   visible: boolean;
@@ -9,8 +10,20 @@ export const useShow: (defaultVisibility?: boolean) => {
   const [visible, setVisible] = useState(defaultVisibility);
   const hide = () => setVisible(false)
   const show = () => setVisible(true)
-  const toggle = () => setVisible(prev=>!prev)
+  const toggle = () => setVisible(prev => !prev)
   return { visible, show, hide, toggle }
+}
+
+export function useLink({ validacaoDisciplina = false, params }: {
+  validacaoDisciplina?: boolean
+  roteiro_estudos?: boolean,
+  params: string[]
+}) {
+  if (validacaoDisciplina) {
+    params = ['avaliacao_adaptadas', 'elaboracoes', ':avaliacao_conhecimento_id', ':disciplina_id', ...params]
+  }
+  const routeParams = useParams();
+  return params.map(p => p[0] === ':' ? routeParams[p.slice(1)] : p).join('/')
 }
 
 const onlyNumbers = (str: string) => {
@@ -30,8 +43,8 @@ const formatPhone = (phone: string) => {
   return phone_out
 }
 
-export const usePhone = (_default: string = '') => {
-  const [phone, setPhone] = useState<string>(formatPhone(_default ?? ''));
+export const usePhone = (defaultValue: string = '') => {
+  const [phone, setPhone] = useState<string>(formatPhone(defaultValue ?? ''));
   const onChangeHandler = (e: string) => {
     if (Math.abs(e.length - phone.length) > 1) {
       setPhone(formatPhone(e));

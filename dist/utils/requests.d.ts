@@ -1,5 +1,11 @@
+/// <reference types="react" />
 import { UseQueryOptions, QueryKey } from '@tanstack/react-query';
 import { z, ZodType } from "zod";
+export declare const axiosDefaults: Omit<import("axios").AxiosDefaults<any>, "headers"> & {
+    headers: import("axios").HeadersDefaults & {
+        [key: string]: import("axios").AxiosHeaderValue;
+    };
+};
 declare const get: (url: string, params?: {}) => () => Promise<any>;
 declare function useGet<T = any>(url: string, params?: {}, additional_params?: UseQueryOptions<T, unknown, T, QueryKey>): {
     queryKey: string[];
@@ -340,9 +346,261 @@ export declare function usePostV2<T = any>({ url, additional_params, headers, ve
     additional_params?: Object;
     headers?: boolean;
     version?: number;
-}): import("@tanstack/react-query").UseMutationResult<any, unknown, T, unknown>;
-declare function usePatch<T = any>(url: string, additional_params?: {}, headers?: boolean): import("@tanstack/react-query").UseMutationResult<any, unknown, Partial<T>, unknown>;
-export declare function usePut<T = any>(url: string, additional_params?: {}, headers?: boolean): import("@tanstack/react-query").UseMutationResult<any, unknown, Partial<T>, unknown>;
+}): {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: true;
+    isLoading: false;
+    isSuccess: false;
+    status: "idle";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: true;
+    isSuccess: false;
+    status: "loading";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: unknown;
+    isError: true;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: false;
+    status: "error";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: any;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: true;
+    status: "success";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+};
+declare function usePatch<T = any>(url: string, additional_params?: {}, headers?: boolean): import("@tanstack/react-query").UseMutationResult<any, unknown, T, unknown>;
+export declare function usePatchV2<T = any>({ url, additional_params, headers, version }: {
+    url: string;
+    additional_params?: Object;
+    headers?: boolean;
+    version?: number;
+}): {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: true;
+    isLoading: false;
+    isSuccess: false;
+    status: "idle";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: true;
+    isSuccess: false;
+    status: "loading";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: unknown;
+    isError: true;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: false;
+    status: "error";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: any;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: true;
+    status: "success";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+};
+export declare function usePut<T = any>(url: string, additional_params?: {}, headers?: boolean): import("@tanstack/react-query").UseMutationResult<any, unknown, T, unknown>;
+export declare function usePutV2<T = any>({ url, additional_params, headers, version }: {
+    url: string;
+    additional_params?: Object;
+    headers?: boolean;
+    version?: number;
+}): {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: true;
+    isLoading: false;
+    isSuccess: false;
+    status: "idle";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: true;
+    isSuccess: false;
+    status: "loading";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: undefined;
+    error: unknown;
+    isError: true;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: false;
+    status: "error";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+} | {
+    queryKey: string[];
+    ErrorMessageComponent: import("react").FC<{
+        className?: string;
+    }>;
+    data: any;
+    error: null;
+    isError: false;
+    isIdle: false;
+    isLoading: false;
+    isSuccess: true;
+    status: "success";
+    mutate: import("@tanstack/react-query").UseMutateFunction<any, unknown, T, unknown>;
+    reset: () => void;
+    context: unknown;
+    failureCount: number;
+    failureReason: unknown;
+    isPaused: boolean;
+    variables: T;
+    mutateAsync: import("@tanstack/react-query").UseMutateAsyncFunction<any, unknown, T, unknown>;
+};
 declare const useDelete: (url: string, additional_params?: {}) => import("@tanstack/react-query").UseMutationResult<any, unknown, any, unknown>;
 declare const useClient: () => import("@tanstack/react-query").QueryClient;
 declare const prefetchQuery: (url: string, client: any) => Promise<void>;

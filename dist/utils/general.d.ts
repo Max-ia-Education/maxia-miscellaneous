@@ -7,3 +7,4 @@ export declare function unique<T>(list: T[]): T[];
 export declare function uniqueObject<T>(arr: T[]): T[];
 export declare const fuzzyStringMatcher: (typed: string, matches: string[]) => boolean;
 export declare const mathMean: (arr: (number | undefined | null)[], round?: boolean) => number;
+export declare function checkHTMLEmpty(html: string | undefined | null): string;

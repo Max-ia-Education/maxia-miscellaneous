@@ -1,0 +1,56 @@
+import React from 'react';
+type ReactSummernoteProps = {
+    name?: string;
+    className?: string;
+    placeholder?: string;
+    codeview?: boolean;
+    math?: boolean;
+    value?: string;
+    disabled?: boolean;
+    options?: any;
+    onInit?: (init: any) => void;
+    onChange?: (content: string, delta: any, source: string, editor: any) => void;
+    onFocus?: (event: any) => void;
+    onBlur?: (event: any) => void;
+    onEnter?: (event: any) => void;
+    onKeyup?: (event: any) => void;
+    onKeydown?: (event: any) => void;
+    onPaste?: (event: any) => void;
+    onImageUpload?: (images: any, insertImage: (url: string) => void) => void;
+};
+declare class ReactSummernote extends React.Component<ReactSummernoteProps> {
+    uid: string;
+    editor: any;
+    noteEditable: any;
+    notePlaceholder: any;
+    constructor(props: ReactSummernoteProps);
+    componentDidMount(): void;
+    UNSAFE_componentWillReceiveProps(nextProps: ReactSummernoteProps): void;
+    shouldComponentUpdate(): boolean;
+    componentWillUnmount(): void;
+    onInit(): void;
+    onImageUpload(images: any): void;
+    focus(): void;
+    isEmpty(): any;
+    reset(): void;
+    replace(content: any): void;
+    disable(): void;
+    enable(): void;
+    toggleState(disabled: any): void;
+    insertImage(url: any, filenameOrCallback: any): void;
+    insertNode(node: any): void;
+    insertText(text: any): void;
+    get callbacks(): {
+        onInit: () => void;
+        onEnter: (event: any) => void;
+        onFocus: (event: any) => void;
+        onBlur: (event: any) => void;
+        onKeyup: (event: any) => void;
+        onKeydown: (event: any) => void;
+        onPaste: (event: any) => void;
+        onChange: (args_0: any, args_1: any, args_2: any, args_3: any) => void;
+        onImageUpload: (images: any) => void;
+    };
+    render(): import("react/jsx-runtime").JSX.Element;
+}
+export default ReactSummernote;

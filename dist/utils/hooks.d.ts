@@ -4,7 +4,12 @@ export declare const useShow: (defaultVisibility?: boolean) => {
     hide: () => void;
     toggle: () => void;
 };
-export declare const usePhone: (_default?: string) => {
+export declare function useLink({ validacaoDisciplina, params }: {
+    validacaoDisciplina?: boolean;
+    roteiro_estudos?: boolean;
+    params: string[];
+}): string;
+export declare const usePhone: (defaultValue?: string) => {
     phone_beautified: string;
     phone: string;
     changeHandler: (e: string) => void;

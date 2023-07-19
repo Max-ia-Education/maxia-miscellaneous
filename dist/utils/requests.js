@@ -1,12 +1,20 @@
-import Axios from "axios";
+import { jsx as _jsx } from "react/jsx-runtime";
+import Axios, { isAxiosError } from "axios";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import Bugsnag from "@bugsnag/js";
-const baseUrl = Axios.defaults.baseURL + '/api/v1/';
-const baseUrlV2 = Axios.defaults.baseURL + '/api/v2/';
+export const axiosDefaults = Axios.defaults;
+function getErrorMessageComponent(error) {
+    return ({ className = 'f14 mt-3 red text-center' }) => {
+        if (!isAxiosError(error))
+            return null;
+        return (_jsx("span", { className: className, children: error.response?.data?.message || 'Erro interno do servidor.' }));
+    };
+}
 const get = (url, params = {}) => {
-    return async () => Axios.get(url, { params: params }).then(res => res.data);
+    const baseUrl = Axios.defaults.baseURL + 'api/v1/';
+    return async () => Axios.get(url, { params: params, baseURL: baseUrl }).then(res => res.data);
 };
 const hour = 60 * 60 * 1000;
 function useGet(url, params = {}, additional_params) {
@@ -28,7 +36,8 @@ function useGet(url, params = {}, additional_params) {
     };
 }
 function getSchema(url, params = {}, schema, version = 1) {
-    return async () => Axios.get(url, { params: params, baseURL: version === 1 ? baseUrl : baseUrlV2 })
+    const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
+    return async () => Axios.get(url, { params: params, baseURL })
         .then(res => res.data).then(data => schema?.parse(data) ?? data);
 }
 export function useGetSchema(url, schema, params = {}, additional_params, version = 1) {
@@ -68,7 +77,8 @@ export function useGetSchemaV2({ url, schema, params, additional_params, version
     };
 }
 function post(url, version = 1) {
-    return async (params) => Axios.post(url, { params: params, ...params }, { baseURL: version === 1 ? baseUrl : baseUrlV2 })
+    const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
+    return async (params) => Axios.post(url, { params: params, ...params }, { baseURL })
         .then(res => res.data).catch(error => {
         error.response?.status >= 500 && Bugsnag.notify(error, e => {
             e.addMetadata('request', { params, error });
@@ -77,7 +87,8 @@ function post(url, version = 1) {
     });
 }
 function postFull(url, version = 1) {
-    return async (params) => Axios.post(url, { params: params, ...params }, { baseURL: version === 1 ? baseUrl : baseUrlV2 })
+    const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
+    return async (params) => Axios.post(url, { params: params, ...params }, { baseURL })
         .catch(error => {
         error.response?.status >= 500 && Bugsnag.notify(error, e => {
             e.addMetadata('request', { params, error });
@@ -92,17 +103,38 @@ function usePost(url, additional_params = {}, headers = false) {
     });
 }
 export function usePostV2({ url, additional_params = {}, headers = false, version = 1 }) {
-    return useMutation([url], (headers ? postFull(url, version) : post(url, version)), {
+    let queryKey = [url];
+    const mutation = useMutation([url], (headers ? postFull(url, version) : post(url, version)), {
         retry: false,
         ...additional_params
     });
+    const ErrorMessageComponent = getErrorMessageComponent(mutation.error);
+    return {
+        ...mutation,
+        queryKey,
+        ErrorMessageComponent
+    };
 }
 // PATCH
-function patch(url) {
-    return async (params) => Axios.patch(url, params).then(res => res.data);
+function patch(url, version = 1) {
+    const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
+    return async (params) => Axios.patch(url, { params: params, ...params }, { baseURL })
+        .then(res => res.data).catch(error => {
+        error.response?.status >= 500 && Bugsnag.notify(error, e => {
+            e.addMetadata('request', { params, error });
+        });
+        throw error;
+    });
 }
-function patchFull(url) {
-    return async (params) => Axios.patch(url, params);
+function patchFull(url, version = 1) {
+    const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
+    return async (params) => Axios.patch(url, { params: params, ...params }, { baseURL })
+        .catch(error => {
+        error.response?.status >= 500 && Bugsnag.notify(error, e => {
+            e.addMetadata('request', { params, error });
+        });
+        throw error;
+    });
 }
 function usePatch(url, additional_params = {}, headers = false) {
     return useMutation([url], (headers ? patchFull(url) : patch(url)), {
@@ -110,18 +142,58 @@ function usePatch(url, additional_params = {}, headers = false) {
         ...additional_params
     });
 }
-// PUT
-function put(url) {
-    return async (params) => Axios.put(url, params).then(res => res.data);
+export function usePatchV2({ url, additional_params = {}, headers = false, version = 1 }) {
+    let queryKey = [url];
+    const mutation = useMutation([url], (headers ? patchFull(url, version) : patch(url, version)), {
+        retry: false,
+        ...additional_params
+    });
+    const ErrorMessageComponent = getErrorMessageComponent(mutation.error);
+    return {
+        ...mutation,
+        queryKey,
+        ErrorMessageComponent
+    };
 }
-function putFull(url) {
-    return async (params) => Axios.patch(url, params);
+// PUT
+function put(url, version = 1) {
+    const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
+    return async (params) => Axios.put(url, { params: params, ...params }, { baseURL })
+        .then(res => res.data).catch(error => {
+        error.response?.status >= 500 && Bugsnag.notify(error, e => {
+            e.addMetadata('request', { params, error });
+        });
+        throw error;
+    });
+}
+function putFull(url, version = 1) {
+    const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
+    return async (params) => Axios.put(url, { params: params, ...params }, { baseURL })
+        .catch(error => {
+        error.response?.status >= 500 && Bugsnag.notify(error, e => {
+            e.addMetadata('request', { params, error });
+        });
+        throw error;
+    });
 }
 export function usePut(url, additional_params = {}, headers = false) {
     return useMutation([url], (headers ? putFull(url) : put(url)), {
         retry: false,
         ...additional_params
     });
+}
+export function usePutV2({ url, additional_params = {}, headers = false, version = 1 }) {
+    let queryKey = [url];
+    const mutation = useMutation([url], (headers ? putFull(url, version) : put(url, version)), {
+        retry: false,
+        ...additional_params
+    });
+    const ErrorMessageComponent = getErrorMessageComponent(mutation.error);
+    return {
+        ...mutation,
+        queryKey,
+        ErrorMessageComponent
+    };
 }
 const _delete = (url) => {
     return async (params) => Axios.delete(url, params).then(res => res.data);

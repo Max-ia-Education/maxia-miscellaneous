@@ -77,3 +77,9 @@ export const mathMean = (arr: (number | undefined | null)[], round = false) => {
   }, [0, 0])
   return round ? Math.ceil(sum / qtde) : sum / qtde
 }
+
+export function checkHTMLEmpty(html: string | undefined | null) {
+  if (!html) return 'Este campo não pode estar vazio.'
+  const doc = new DOMParser().parseFromString(html, 'text/html')
+  return (doc.body.textContent || "").trim().length === 0 ? 'Este campo não pode estar vazio.' : undefined
+}
