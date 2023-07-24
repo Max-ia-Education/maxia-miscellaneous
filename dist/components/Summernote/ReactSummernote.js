@@ -97,12 +97,17 @@ class ReactSummernote extends React.Component {
         let pasteEvent = new CustomEvent('paste');
         pasteEvent.clipboardData = {
             getData: function () {
-                return value;
+                // Parse the string as an html node
+                let parser = new DOMParser();
+                let doc = parser.parseFromString(value, 'text/html');
+                return doc.body.innerHTML;
             },
             types: ['text/html']
         };
         this.replace('');
-        this.noteEditable[0].dispatchEvent(pasteEvent);
+        setTimeout(() => {
+            this.replace(value);
+        }, 10);
     }
     onImageUpload(images) {
         const { onImageUpload } = this.props;

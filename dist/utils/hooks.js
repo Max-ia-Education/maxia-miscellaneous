@@ -7,12 +7,17 @@ export const useShow = (defaultVisibility = false) => {
     const toggle = () => setVisible(prev => !prev);
     return { visible, show, hide, toggle };
 };
-export function useLink({ validacaoDisciplina = false, params }) {
+// function isObject(params: TUseLink): params is object {
+// }
+export function useLink({ validacaoDisciplina = false, route }) {
+    // if (typeof params === 'object') {
+    //   const { validacaoDisciplina = false, route } = params
+    // }
     if (validacaoDisciplina) {
-        params = ['avaliacao_adaptadas', 'elaboracoes', ':avaliacao_conhecimento_id', ':disciplina_id', ...params];
+        route = ['avaliacao_adaptadas', 'elaboracoes', ':avaliacao_conhecimento_id', ':disciplina_id', ...route];
     }
     const routeParams = useParams();
-    return params.map(p => p[0] === ':' ? routeParams[p.slice(1)] : p).join('/');
+    return route.map(p => p[0] === ':' ? routeParams[p.slice(1)] : p).join('/');
 }
 const onlyNumbers = (str) => {
     return str.replace(/\D/g, '');

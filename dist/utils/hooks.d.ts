@@ -4,13 +4,15 @@ export declare const useShow: (defaultVisibility?: boolean) => {
     hide: () => void;
     toggle: () => void;
 };
-export declare function useLink({ validacaoDisciplina, params }: {
+type TUseLink = {
     validacaoDisciplina?: boolean;
     roteiro_estudos?: boolean;
-    params: string[];
-}): string;
+    route: string[];
+};
+export declare function useLink({ validacaoDisciplina, route }: TUseLink): string;
 export declare const usePhone: (defaultValue?: string) => {
     phone_beautified: string;
     phone: string;
     changeHandler: (e: string) => void;
 };
+export {};
