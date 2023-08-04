@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 export const useShow = (defaultVisibility = false) => {
     const [visible, setVisible] = useState(defaultVisibility);
@@ -7,14 +7,23 @@ export const useShow = (defaultVisibility = false) => {
     const toggle = () => setVisible(prev => !prev);
     return { visible, show, hide, toggle };
 };
-// function isObject(params: TUseLink): params is object {
-// }
-export function useLink({ validacaoDisciplina = false, route }) {
-    // if (typeof params === 'object') {
-    //   const { validacaoDisciplina = false, route } = params
-    // }
-    if (validacaoDisciplina) {
-        route = ['avaliacao_adaptadas', 'elaboracoes', ':avaliacao_conhecimento_id', ':disciplina_id', ...route];
+function isTUseLinkObject(params) {
+    return (!Array.isArray(params));
+}
+export function useLink(params) {
+    let route = [];
+    if (isTUseLinkObject(params)) {
+        let { validacaoDisciplina = false, roteiro_estudos = false } = params;
+        route = params.route;
+        if (validacaoDisciplina) {
+            route = ['avaliacao_adaptadas', 'elaboracoes', ':avaliacao_conhecimento_id', ':disciplina_id', ...route];
+        }
+        if (roteiro_estudos) {
+            route = ['roteiro_estudos', ':turma_avaliacao_id', ':materia_id', ...route];
+        }
+    }
+    else {
+        route = params;
     }
     const routeParams = useParams();
     return route.map(p => p[0] === ':' ? routeParams[p.slice(1)] : p).join('/');
@@ -68,4 +77,17 @@ export const usePhone = (defaultValue = '') => {
         phone: onlyNumbers(phone),
         changeHandler: onChangeHandler
     };
+};
+export const useCountdownTimer = (t_0) => {
+    const [timeLeft, setTimeLeft] = useState(t_0);
+    useEffect(() => {
+        setTimeLeft(t_0);
+        const interval = setInterval(() => {
+            setTimeLeft(prev => prev - 1);
+        }, 1000);
+        return () => {
+            clearInterval(interval);
+        };
+    }, [t_0]);
+    return timeLeft;
 };

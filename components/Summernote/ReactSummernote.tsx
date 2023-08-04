@@ -132,7 +132,7 @@ class ReactSummernote extends React.Component<ReactSummernoteProps> {
 
     // Text initializer
     // The paste should be an event so summernote cleans the code
-    if (!value) return
+    if (!value || value === '' || value === '<p><br /></p>') return
 
     let pasteEvent: any = new CustomEvent('paste');
     pasteEvent.clipboardData = {

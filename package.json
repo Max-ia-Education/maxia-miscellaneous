@@ -1,6 +1,6 @@
 {
   "name": "maxia-miscellaneous",
-  "version": "1.2.4",
+  "version": "1.2.9",
   "description": "Max.ia Helper functions and styles",
   "author": "",
   "license": "ISC",
@@ -12,7 +12,7 @@
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc --build",
+    "build": "tsc --build -w",
     "sass": "sass -w styles/general.scss:dist/styles/general.css styles/item-design.scss:dist/styles/item-design.css components/Summernote/styles.scss:dist/components/Summernote/styles.css"
   },
   "peerDependencies": {

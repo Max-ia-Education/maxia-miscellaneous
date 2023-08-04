@@ -487,4 +487,12 @@
   text-decoration: underline #009dcc;
 }
 
+.one-liner {
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
 /*# sourceMappingURL=general.css.map */

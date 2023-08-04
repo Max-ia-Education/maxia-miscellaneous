@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import Bugsnag from "@bugsnag/js";
+import { useLink } from "./hooks";
 export const axiosDefaults = Axios.defaults;
 function getErrorMessageComponent(error) {
     return ({ className = 'f14 mt-3 red text-center' }) => {
@@ -12,53 +13,16 @@ function getErrorMessageComponent(error) {
         return (_jsx("span", { className: className, children: error.response?.data?.message || 'Erro interno do servidor.' }));
     };
 }
-const get = (url, params = {}) => {
-    const baseUrl = Axios.defaults.baseURL + 'api/v1/';
-    return async () => Axios.get(url, { params: params, baseURL: baseUrl }).then(res => res.data);
-};
 const hour = 60 * 60 * 1000;
-function useGet(url, params = {}, additional_params) {
-    let queryKey = [url];
-    queryKey.push(JSON.stringify(params));
-    return {
-        ...useQuery(queryKey, get(url, params), {
-            cacheTime: 7 * 24 * hour,
-            staleTime: 7 * 24 * hour,
-            refetchInterval: 24 * hour,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-            refetchOnWindowFocus: false,
-            retry: false,
-            useErrorBoundary: (e) => e.response?.status >= 500,
-            ...additional_params ?? {}
-        }),
-        queryKey
-    };
-}
 function getSchema(url, params = {}, schema, version = 1) {
     const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
     return async () => Axios.get(url, { params: params, baseURL })
         .then(res => res.data).then(data => schema?.parse(data) ?? data);
 }
-export function useGetSchema(url, schema, params = {}, additional_params, version = 1) {
-    let queryKey = [url];
-    queryKey.push(JSON.stringify(params));
-    return {
-        ...useQuery(queryKey, getSchema(url, params, schema, version), {
-            cacheTime: 7 * 24 * hour,
-            staleTime: 7 * 24 * hour,
-            refetchInterval: 24 * hour,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-            refetchOnWindowFocus: false,
-            retry: false,
-            useErrorBoundary: (e) => e.response?.status >= 500 || (e instanceof z.ZodError),
-            ...additional_params ?? {}
-        }),
-        queryKey
-    };
-}
-export function useGetSchemaV2({ url, schema, params, additional_params, version = 1 }) {
+export function useGet({ url, schema, params, additional_params, version = 1 }) {
+    if (!(typeof url === 'string')) {
+        url = useLink(url);
+    }
     let queryKey = [url];
     queryKey.push(JSON.stringify(params));
     return {
@@ -96,13 +60,10 @@ function postFull(url, version = 1) {
         throw error;
     });
 }
-function usePost(url, additional_params = {}, headers = false) {
-    return useMutation([url], (headers ? postFull(url) : post(url)), {
-        retry: false,
-        ...additional_params
-    });
-}
-export function usePostV2({ url, additional_params = {}, headers = false, version = 1 }) {
+export function usePost({ url, additional_params = {}, headers = false, version = 1 }) {
+    if (!(typeof url === 'string')) {
+        url = useLink(url);
+    }
     let queryKey = [url];
     const mutation = useMutation([url], (headers ? postFull(url, version) : post(url, version)), {
         retry: false,
@@ -136,13 +97,10 @@ function patchFull(url, version = 1) {
         throw error;
     });
 }
-function usePatch(url, additional_params = {}, headers = false) {
-    return useMutation([url], (headers ? patchFull(url) : patch(url)), {
-        retry: false,
-        ...additional_params
-    });
-}
-export function usePatchV2({ url, additional_params = {}, headers = false, version = 1 }) {
+export function usePatch({ url, additional_params = {}, headers = false, version = 1 }) {
+    if (!(typeof url === 'string')) {
+        url = useLink(url);
+    }
     let queryKey = [url];
     const mutation = useMutation([url], (headers ? patchFull(url, version) : patch(url, version)), {
         retry: false,
@@ -176,13 +134,10 @@ function putFull(url, version = 1) {
         throw error;
     });
 }
-export function usePut(url, additional_params = {}, headers = false) {
-    return useMutation([url], (headers ? putFull(url) : put(url)), {
-        retry: false,
-        ...additional_params
-    });
-}
-export function usePutV2({ url, additional_params = {}, headers = false, version = 1 }) {
+export function usePut({ url, additional_params = {}, headers = false, version = 1 }) {
+    if (!(typeof url === 'string')) {
+        url = useLink(url);
+    }
     let queryKey = [url];
     const mutation = useMutation([url], (headers ? putFull(url, version) : put(url, version)), {
         retry: false,
@@ -195,23 +150,21 @@ export function usePutV2({ url, additional_params = {}, headers = false, version
         ErrorMessageComponent
     };
 }
-const _delete = (url) => {
-    return async (params) => Axios.delete(url, params).then(res => res.data);
+const _delete = (url, version = 1) => {
+    const baseURL = Axios.defaults.baseURL + (version === 1 ? 'api/v1/' : 'api/v2/');
+    return async (params) => Axios.delete(url, { ...params, baseURL }).then(res => res.data);
 };
-const useDelete = (url, additional_params = {}) => {
+export const useDelete = (url, additional_params = {}) => {
     return useMutation([url], _delete(url), {
         ...additional_params
     });
 };
-const useClient = () => {
+export const useClient = () => {
     return useQueryClient();
 };
-const prefetchQuery = async (url, client) => {
-    await client.prefetchQuery([url, '{}'], get(url), {
-        cacheTime: 7 * 24 * 60 * 60 * 1000,
-        staleTime: 7 * 24 * 60 * 60 * 1000,
-        retry: 1
-    });
+export const usePrefetchQuery = (url, schema) => {
+    const { refetch } = useGet({ url, schema, additional_params: { enabled: false } });
+    return refetch;
 };
 export function useDummyRequest() {
     const [isLoading, setIsLoading] = useState(true);
@@ -222,4 +175,3 @@ export function useDummyRequest() {
     }, []);
     return isLoading;
 }
-export { useGet, usePost, useClient, get, prefetchQuery, useDelete, usePatch };
