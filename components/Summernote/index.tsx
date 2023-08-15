@@ -8,7 +8,7 @@ export const Summernote = forwardRef(function Summernote(
   ref
 ) {
   useEffect(() => {
-    $('.note-editing-area').addClass(noteEditorClass)
+    // $('.note-editing-area').addClass(noteEditorClass)
   }, [])
 
   return (

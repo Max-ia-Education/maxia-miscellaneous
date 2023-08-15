@@ -81,5 +81,7 @@ export const mathMean = (arr: (number | undefined | null)[], round = false) => {
 export function checkHTMLEmpty(html: string | undefined | null) {
   if (!html) return 'Este campo não pode estar vazio.'
   const doc = new DOMParser().parseFromString(html, 'text/html')
+  if (html.includes('<img')) return undefined
+
   return (doc.body.textContent || "").trim().length === 0 ? 'Este campo não pode estar vazio.' : undefined
 }

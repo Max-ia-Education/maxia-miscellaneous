@@ -40,11 +40,11 @@ class ReactSummernote extends React.Component {
         const codeview = this.props.codeview;
         // const codeviewCommand = codeview ? 'codeview.activate' : 'codeview.deactivate';
         options.callbacks = this.callbacks;
-        this.editor = $(`#${this.uid}`);
-        this.editor.summernote(options);
-        if (codeview) {
-            this.editor.summernote('codeview.activate');
-        }
+        // this.editor = $(`#${this.uid}`);
+        // this.editor.summernote(options);
+        // if (codeview) {
+        //   this.editor.summernote('codeview.activate');
+        // }
     }
     UNSAFE_componentWillReceiveProps(nextProps) {
         const { props } = this;

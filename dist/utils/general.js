@@ -72,5 +72,7 @@ export function checkHTMLEmpty(html) {
     if (!html)
         return 'Este campo não pode estar vazio.';
     const doc = new DOMParser().parseFromString(html, 'text/html');
+    if (html.includes('<img'))
+        return undefined;
     return (doc.body.textContent || "").trim().length === 0 ? 'Este campo não pode estar vazio.' : undefined;
 }

@@ -68,11 +68,11 @@ class ReactSummernote extends React.Component<ReactSummernoteProps> {
     // const codeviewCommand = codeview ? 'codeview.activate' : 'codeview.deactivate';
     options.callbacks = this.callbacks;
 
-    this.editor = $(`#${this.uid}`);
-    this.editor.summernote(options);
-    if (codeview) {
-      this.editor.summernote('codeview.activate');
-    }
+    // this.editor = $(`#${this.uid}`);
+    // this.editor.summernote(options);
+    // if (codeview) {
+    //   this.editor.summernote('codeview.activate');
+    // }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps: ReactSummernoteProps) {
@@ -149,7 +149,7 @@ class ReactSummernote extends React.Component<ReactSummernoteProps> {
     this.replace('')
     setTimeout(() => {
       this.replace(value)
-    }, 10);  
+    }, 10);
 
   }
 
